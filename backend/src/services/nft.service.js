@@ -10,13 +10,16 @@ const nftServices = {
   findById: async (id) => {
     return await nftModel.findById(id);
   },
+  findByOwnerAndId: async (owner, nftId) => {
+    return await nftModel.findOne({ owner, nftId });
+  },
   findByOwner: async (_owner) => {
     return await nftModel.find({ owner: _owner });
   },
   countAll: async (_owner) => {
     return await nftModel.count();
   },
-  countFindByFilter: async ({ ownerFilter }) => {
+  countFindByFilter: async (ownerFilter) => {
     return await nftModel
       .find(
         ownerFilter
@@ -27,7 +30,7 @@ const nftServices = {
       )
       .count();
   },
-  findByFilter: async ({ ownerFilter }, { skip, limit }) => {
+  findByFilter: async (ownerFilter, { skip, limit }) => {
     return await nftModel
       .find(
         ownerFilter

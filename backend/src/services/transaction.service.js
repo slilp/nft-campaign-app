@@ -23,10 +23,14 @@ const transactionServices = {
     }
   },
   countUserTransaction: async (user) => {
-    return await userModel.find({ from: user }).count();
+    return await transactionModel.count({ from: user });
   },
   findUserTransactions: async (user, { skip, limit }) => {
-    return await userModel.find({ from: user }).skip(skip).limit(limit);
+    return await transactionModel
+      .find({ from: user })
+      .populate("nft")
+      .skip(skip)
+      .limit(limit);
   },
 };
 

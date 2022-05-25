@@ -23,6 +23,7 @@ router.post(
 router.put(
   "/send-nft",
   userValidators.sendNftValidationRules,
+  validate,
   [jwtAuthentication],
   asyncHandler(nftControllers.sendNft)
 );

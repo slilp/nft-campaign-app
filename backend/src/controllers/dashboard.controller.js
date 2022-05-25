@@ -6,8 +6,10 @@ const {
 
 module.exports = {
   stat: async (req, res) => {
-    const totalUser = await userServices.countAll();
-    const totalNft = await nftServices.countAll();
-    return res.json({ totalUser, totalNft });
+    const result = await Promise.all([
+      userServices.countAll(),
+      nftServices.countAll(),
+    ]);
+    return res.json({ totalUser: result[0], totalNft: result[1] });
   },
 };

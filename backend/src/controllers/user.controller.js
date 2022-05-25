@@ -16,20 +16,24 @@ module.exports = {
 
     const pass = await bcryptPassword.hashPassword(req.body.password);
 
-    // create wallet
-    const blockchainResponse = await blockchainServices.createWallet();
-
     const result = await userServices.create({
       username: req.body.username,
       password: pass,
-      wallet: blockchainResponse,
     });
 
-    delete result.password;
-    return res.json(result);
+    const address = await blockchainServices.createWallet(result?.derivationId);
+
+    const updateResult = await userServices.update(result?._id, {
+      wallet: address,
+    });
+
+    return res.json({
+      username: updateResult?.username,
+      wallet: updateResult?.wallet,
+    });
   },
   login: async (req, res) => {
-    let user = await studentServices.findByUsername(req.body.username);
+    let user = await userServices.findByUsername(req.body.username);
 
     if (!user)
       return res.status(401).json({
@@ -47,10 +51,10 @@ module.exports = {
       });
 
     const accessToken = tokenGenerator.accessTokenGenerator(user._id);
-    delete result.password;
+    const { _id, username, wallet } = user;
 
     return res.json({
-      account: user,
+      account: { id: _id, username, wallet },
       token: {
         accessToken: accessToken,
         tokenType: "bearer",
@@ -60,15 +64,26 @@ module.exports = {
   },
   userTransactions: async (req, res) => {
     const { skip = 0, limit = 15 } = req.query;
-    const result = await transactionServices.findUserTransactions(req.user, {
-      skip: +skip,
-      limit: +limit,
-    });
-    return res.json(result);
+    const result = await Promise.all([
+      transactionServices.findUserTransactions(req.user, {
+        skip: +skip,
+        limit: +limit,
+      }),
+      transactionServices.countUserTransaction(req.user),
+    ]);
+    return res.json({ transactions: result[0], totalCount: result[1] });
   },
   userNft: async (req, res) => {
     const userInfo = await userServices.findById(req.user);
-    const result = await nftServices.findByOwner(userInfo.wallet);
-    return res.json(result);
+    const { skip = 0, limit = 15 } = req.query;
+    const result = await Promise.all([
+      nftServices.findByFilter(userInfo.wallet, {
+        skip: +skip,
+        limit: +limit,
+      }),
+      nftServices.countFindByFilter(userInfo.wallet),
+    ]);
+
+    return res.json({ nfts: result[0], totalCount: result[1] });
   },
 };

@@ -9,8 +9,5 @@ module.exports = {
     body("username").isEmail(),
     body("password").notEmpty(),
   ],
-  sendNftValidationRules: [
-    body("nftId").notEmpty(),
-    body("username").isEmail(),
-  ],
+  sendNftValidationRules: [body("nftId").isNumeric(), body("to").notEmpty()],
 };

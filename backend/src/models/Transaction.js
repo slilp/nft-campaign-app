@@ -3,6 +3,7 @@ const { Schema } = mongoose;
 
 const schema = new Schema(
   {
+    hash: String,
     timestamp: { type: Date, default: Date.now },
     to: String,
     from: { type: mongoose.Types.ObjectId, ref: "user" },

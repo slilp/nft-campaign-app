@@ -4,6 +4,9 @@ const userServices = {
   create: async (addModel) => {
     return await userModel.create(addModel);
   },
+  update: async (id, updateModel) => {
+    return await userModel.findOneAndUpdate({ _id: id }, updateModel);
+  },
   findByUsername: async (_username) => {
     return await userModel.findOne({ username: _username });
   },
