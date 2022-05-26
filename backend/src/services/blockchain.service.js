@@ -17,15 +17,15 @@ const blockchainServices = {
   mint: async (derivationId, uri) => {
     const contract = await getNFTContract(derivationId);
     const mintTransaction = await sendTransaction(contract, "mint", [uri]);
-    return mintTransaction;
+    return mintTransaction?.events[1]?.data;
   },
-  transfer: async (derivationId, from, nft, to) => {
+  transfer: async (derivationId, wallet, nft, to) => {
     const contract = await getNFTContract(derivationId);
-    const transferTransaction = await sendTransaction(contract, "transfer", [
-      from,
-      to,
-      nft,
-    ]);
+    const transferTransaction = await sendTransaction(
+      contract,
+      "transferFrom",
+      [wallet, to, nft]
+    );
     return transferTransaction;
   },
 };

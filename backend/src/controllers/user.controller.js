@@ -29,7 +29,7 @@ module.exports = {
 
     return res.json({
       username: updateResult?.username,
-      wallet: updateResult?.wallet,
+      wallet: address,
     });
   },
   login: async (req, res) => {

@@ -11,7 +11,6 @@ module.exports = {
     if (!req.file) {
       res.status(401).json({ error: "NOT FOUND IMAGE UPLOAD" });
     }
-    const adminInfo = await userServices.findOne({ derivationId: 0 });
     const upload = await ipfsServices(req.file.buffer);
 
     const mintResult = await blockchainServices.mint(
@@ -20,8 +19,8 @@ module.exports = {
     );
 
     const createResult = await nftServices.create({
-      owner: adminInfo.wallet,
-      nftId: mintResult?.id,
+      owner: process.env.ROOT_WALLET,
+      nftId: mintResult,
       urlImage: upload?.IpfsHash,
     });
 
@@ -62,9 +61,8 @@ module.exports = {
     });
   },
   adminSendNft: async (req, res) => {
-    const adminInfo = await userServices.findOne({ derivationId: 0 });
     const nftInfo = await nftServices.findByOwnerAndId(
-      adminInfo.wallet,
+      process.env.ROOT_WALLET,
       req.body.nftId
     );
     if (!nftInfo)
@@ -73,25 +71,18 @@ module.exports = {
       });
 
     const sendResult = await blockchainServices.transfer(
-      adminInfo.derivationId,
-      adminInfo.wallet,
+      0,
+      process.env.ROOT_WALLET,
       req.body.nftId,
       req.body.to
     );
-
-    const createTransaction = await transactionServices.create({
-      hash: sendResult?.transactionHash,
-      to: req.body.to,
-      from: req.user,
-      nft: nftInfo._id,
-    });
 
     const updateOwner = await nftServices.update(nftInfo._id, {
       owner: req.body.to,
     });
 
     return res.json({
-      hash: createTransaction.hash,
+      hash: sendResult?.transactionHash,
       nft: updateOwner,
     });
   },

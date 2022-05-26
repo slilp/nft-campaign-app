@@ -19,9 +19,6 @@ module.exports = async (upload) => {
     pinataMetadata: {
       name: `nft-${uuid}`,
     },
-    pinataOptions: {
-      cidVersion: 0,
-    },
   };
   const stream = bufferToStream(upload);
   stream.path = `nft-${uuid}`;
