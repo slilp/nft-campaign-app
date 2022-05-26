@@ -27,6 +27,7 @@
     "passport-headerapikey": "^1.2.2",
     "passport-jwt": "^4.0.0",
     "sharp": "^0.30.5",
-    "stream": "^0.0.2"
+    "stream": "^0.0.2",
+    "uuid": "^8.3.2"
   }
 }

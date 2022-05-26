@@ -1,33 +1,29 @@
-const axios = require("axios");
-const FormData = require("form-data");
 const pinataSDK = require("@pinata/sdk");
-const { Readable } = require("stream");
+const { Duplex } = require("stream");
+const { v4: uuidv4 } = require("uuid");
 const pinata = pinataSDK(
   process.env.PINATA_API_KEY,
   process.env.PINATA_SECRET_API_KEY
 );
 
-module.exports = async (id, upload) => {
+function bufferToStream(buffer) {
+  let tmp = new Duplex();
+  tmp.push(buffer);
+  tmp.push(null);
+  return tmp;
+}
+
+module.exports = async (upload) => {
+  const uuid = uuidv4();
   const options = {
     pinataMetadata: {
-      name: "test",
-      keyvalues: {
-        customKey: "customValue",
-        customKey2: "customValue2",
-      },
+      name: `nft-${uuid}`,
     },
     pinataOptions: {
       cidVersion: 0,
     },
   };
-  const stream = Readable.from(upload.toString());
-  stream.path = "test.png";
-  try {
-    const response = await pinata.pinFileToIPFS(stream, options);
-    console.log(JSON.stringify(response));
-    return response;
-  } catch (error) {
-    console.log(JSON.stringify(error));
-    throw error;
-  }
+  const stream = bufferToStream(upload);
+  stream.path = `nft-${uuid}`;
+  return await pinata.pinFileToIPFS(stream, options);
 };

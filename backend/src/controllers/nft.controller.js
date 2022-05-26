@@ -11,20 +11,23 @@ module.exports = {
     if (!req.file) {
       res.status(401).json({ error: "NOT FOUND IMAGE UPLOAD" });
     }
-    const upload = await ipfsServices("test", req.file.buffer);
+    const adminInfo = await userServices.findOne({ derivationId: 0 });
+    const upload = await ipfsServices(req.file.buffer);
 
-    const nftInfo = await blockchainServices.mint();
+    const mintResult = await blockchainServices.mint(
+      0,
+      process.env.IPFS_PATH + `/${upload?.IpfsHash}`
+    );
 
     const createResult = await nftServices.create({
-      owner: "0x20d446C0FeD64779A0b93B5664C4F2E9d50D23D3",
-      nftId: 1,
-      urlImage: "npfs",
+      owner: adminInfo.wallet,
+      nftId: mintResult?.id,
+      urlImage: upload?.IpfsHash,
     });
 
     return res.json(createResult);
   },
   sendNft: async (req, res) => {
-    // send nft
     const userInfo = await userServices.findById(req.user);
     const nftInfo = await nftServices.findByOwnerAndId(
       userInfo.wallet,
@@ -35,10 +38,15 @@ module.exports = {
         message: "invalid nft id",
       });
 
-    const blockchainResult = await blockchainServices.transfer();
+    const sendResult = await blockchainServices.transfer(
+      userInfo.derivationId,
+      userInfo.wallet,
+      req.body.nftId,
+      req.body.to
+    );
 
     const createTransaction = await transactionServices.create({
-      hash: "myhash",
+      hash: sendResult?.transactionHash,
       to: req.body.to,
       from: req.user,
       nft: nftInfo._id,
@@ -54,9 +62,9 @@ module.exports = {
     });
   },
   adminSendNft: async (req, res) => {
-    const userInfo = await userServices.findById("628e31d98485e55a85b5a16a");
+    const adminInfo = await userServices.findOne({ derivationId: 0 });
     const nftInfo = await nftServices.findByOwnerAndId(
-      userInfo.wallet,
+      adminInfo.wallet,
       req.body.nftId
     );
     if (!nftInfo)
@@ -64,10 +72,15 @@ module.exports = {
         message: "invalid nft id",
       });
 
-    const blockchainResult = await blockchainServices.transfer();
+    const sendResult = await blockchainServices.transfer(
+      adminInfo.derivationId,
+      adminInfo.wallet,
+      req.body.nftId,
+      req.body.to
+    );
 
     const createTransaction = await transactionServices.create({
-      hash: "myhash",
+      hash: sendResult?.transactionHash,
       to: req.body.to,
       from: req.user,
       nft: nftInfo._id,
