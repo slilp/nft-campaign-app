@@ -1,0 +1,46 @@
+import { toast } from "react-toastify";
+
+const useTransaction = () => {
+  const sendTransaction = async (
+    contract: any,
+    method: string,
+    args: any,
+    overrides: any = null,
+    notDisplayError: boolean
+  ) => {
+    try {
+      const raw = await contract[method](...args, { ...overrides });
+      if (raw.hash) {
+        const tx = await raw.wait();
+
+        if (tx.transactionHash) {
+          toast.success(
+            `Success : ${tx.transactionHash.substring(
+              0,
+              12
+            )}...${tx.transactionHash.substring(
+              tx.transactionHash.length - 12,
+              tx.transactionHash.length
+            )}`,
+            {
+              position: toast.POSITION.BOTTOM_RIGHT,
+            }
+          );
+        }
+
+        return tx;
+      } else {
+        return raw;
+      }
+    } catch (error: any) {
+      if (!notDisplayError)
+        toast.error(`Fail : ${error.message}`, {
+          position: toast.POSITION.BOTTOM_RIGHT,
+        });
+    }
+  };
+
+  return { sendTransaction };
+};
+
+export default useTransaction;
