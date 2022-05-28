@@ -1,22 +1,28 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { StaticJsonRpcProvider } from "@ethersproject/providers";
+import { formatEther } from "@ethersproject/units";
+interface UseWalletProps {
+  refresh: boolean;
+  wallet: string;
+}
 
-function useWallet() {
-  const [loading, setLoading] = useState<boolean>(false);
+function useWallet({ refresh, wallet }: UseWalletProps) {
+  const [balance, setBalance] = useState<number>(0);
   const RPC_URL = "https://polygon-rpc.com";
   const provider = new StaticJsonRpcProvider(RPC_URL);
 
+  useEffect(() => {
+    getBalance(wallet);
+  }, [refresh, wallet]);
+
   const getBalance = async (address: string) => {
-    setLoading(true);
     try {
       const response = await provider.getBalance(address);
-      return response;
-    } catch (error) {
-      setLoading(false);
-    }
+      setBalance(+formatEther(response));
+    } catch (error) {}
   };
 
-  return { getBalance, loading };
+  return { balance };
 }
 
 export default useWallet;

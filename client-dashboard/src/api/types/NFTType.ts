@@ -15,11 +15,13 @@ export interface INftOwnerRequest {
 
 export interface INftListResponse {
   totalCount: number;
-  nfts: {
-    nftId: number;
-    owner: string;
-    urlImage: string;
-  }[];
+  nfts: INftModelResponse[];
+}
+
+export interface INftModelResponse {
+  nftId: number;
+  owner: string;
+  urlImage: string;
 }
 
 export interface INftListResponse {

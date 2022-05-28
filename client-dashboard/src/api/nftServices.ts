@@ -11,7 +11,9 @@ export const getNftByOwner = async ({
   limit,
   search,
 }: INftOwnerRequest): Promise<INftListResponse> => {
-  const response = await request.get<INftListResponse>("/nft/search-owner");
+  const response = await request.get<INftListResponse>(
+    `/nft/search-owner?skip=${skip}&limit=${limit}&search=${search}`
+  );
   return response.data;
 };
 

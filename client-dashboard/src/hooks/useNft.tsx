@@ -1,8 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { mint, transfer, getNftByOwner } from "../api/nftServices";
+import { INftListResponse } from "../api/types/NFTType";
 
-function useNft() {
+interface UseNftProps {
+  refresh: boolean;
+  owner: string;
+  skip: number;
+}
+
+function useNft({ refresh, owner, skip }: UseNftProps) {
   const [loading, setLoading] = useState<boolean>(false);
+  const [nftList, setNftList] = useState<INftListResponse>({
+    totalCount: 0,
+    nfts: [],
+  });
+
+  useEffect(() => {
+    fetchNftData(skip, owner);
+  }, [refresh, owner, skip]);
 
   const transferNft = async (nftId: number, to: string) => {
     setLoading(true);
@@ -30,22 +45,18 @@ function useNft() {
     }
   };
 
-  const fetchNftData = async (skip: number, limit: number, search: string) => {
-    setLoading(true);
+  const fetchNftData = async (skip: number, search: string) => {
     try {
       const response = await getNftByOwner({
-        skip,
-        limit,
+        skip: skip * 5,
+        limit: 5,
         search,
       });
-      setLoading(false);
-      return response;
-    } catch (error) {
-      setLoading(false);
-    }
+      setNftList(response);
+    } catch (error) {}
   };
 
-  return { transferNft, mintNft, fetchNftData, loading };
+  return { transferNft, mintNft, nftList, loading };
 }
 
 export default useNft;

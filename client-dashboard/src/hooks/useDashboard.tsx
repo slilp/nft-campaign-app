@@ -1,34 +1,22 @@
-import { useState } from "react";
-import { getStat, getStatUser } from "../api/dashboardServices";
+import { useEffect, useState } from "react";
+import { getStat } from "../api/dashboardServices";
+import { IDashboardResponse } from "../api/types/DashboardType";
 
-function useDashboard() {
-  const [loading, setLoading] = useState<boolean>(false);
+function useDashboard({ refresh }: { refresh: boolean }) {
+  const [stat, setStat] = useState<IDashboardResponse>();
+
+  useEffect(() => {
+    fetchStatData();
+  }, [refresh]);
 
   const fetchStatData = async () => {
-    setLoading(true);
     try {
       const response = await getStat();
-      console.log(response);
-      setLoading(false);
-      return response;
-    } catch (error) {
-      setLoading(false);
-    }
+      setStat(response);
+    } catch (error) {}
   };
 
-  const fetchStatWalletData = async (skip: number = 0, limit: number = 15) => {
-    setLoading(true);
-    try {
-      const response = await getStatUser(skip, limit);
-      console.log(response);
-      setLoading(false);
-      return response;
-    } catch (error) {
-      setLoading(false);
-    }
-  };
-
-  return { fetchStatData, fetchStatWalletData, loading };
+  return { stat };
 }
 
 export default useDashboard;
