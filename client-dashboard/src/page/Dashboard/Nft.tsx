@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { FaCube } from "react-icons/fa";
-
+import Loading from "../../components/Loading";
 import TransferModal from "./TransferModal";
 import NftList from "./NftList";
+import useTransactionNft from "../../hooks/useTransactionNft";
 
 interface NftProps {
+  setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
   refresh: boolean;
 }
 
@@ -20,7 +22,7 @@ export interface IQuerySelection {
   page: number;
 }
 
-function Nft({ refresh }: NftProps) {
+function Nft({ setRefresh, refresh }: NftProps) {
   const [search, setSearch] = useState<IQuerySelection>({
     typeWallet: false,
     selectedWallet: "-",
@@ -30,6 +32,7 @@ function Nft({ refresh }: NftProps) {
   const [showModal, setShowModal] = useState<IModal>({
     open: false,
   });
+  const { transferNft, loading } = useTransactionNft();
 
   useEffect(() => {
     setSearch({
@@ -39,6 +42,12 @@ function Nft({ refresh }: NftProps) {
     });
     setSearchText("");
   }, [refresh]);
+
+  const transfer = async (nftId: number, wallet: string) => {
+    await transferNft(nftId, wallet);
+    setRefresh((prev) => !prev);
+    setShowModal((prev) => ({ ...prev, open: false }));
+  };
 
   return (
     <div className="col-span-2">
@@ -124,18 +133,20 @@ function Nft({ refresh }: NftProps) {
       )}
 
       <NftList
-        refresh
+        refresh={refresh}
         setShowModal={setShowModal}
         setSearch={setSearch}
         search={search}
       />
       {showModal.open ? (
         <TransferModal
+          transfer={transfer}
           setShowModal={setShowModal}
           image={showModal.urlImage || ""}
           nftId={showModal.nftId || 0}
         />
       ) : null}
+      {loading && <Loading />}
     </div>
   );
 }

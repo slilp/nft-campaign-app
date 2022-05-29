@@ -1,28 +1,34 @@
 import React, { useState, useRef } from "react";
 import { FaCube, FaTimesCircle, FaRocket } from "react-icons/fa";
+import Loading from "../../components/Loading";
+import useTransactionNft from "../../hooks/useTransactionNft";
 
 interface MintingProps {
-  refresh: boolean;
+  setRefresh: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function Minting({ refresh }: MintingProps) {
+function Minting({ setRefresh }: MintingProps) {
+  const { mintNft, loading } = useTransactionNft();
   const uploadImgRef = useRef<any>(null);
   const [images, setImages] = useState<string>("");
-
-  const transformAddress = (adr: string) =>
-    adr.substring(0, 12) + "..." + adr.substring(adr.length - 12, adr.length);
-
-  const transformShortAddress = (adr: string) =>
-    adr.substring(0, 6) + "..." + adr.substring(adr.length - 6, adr.length);
+  const [fileImage, setFileImage] = useState<File>();
 
   const handleChange = (e: any) => {
     if (e.target.files.length) {
       setImages(URL.createObjectURL(e.target.files[0]));
+      setFileImage(e.target.files[0]);
     }
   };
 
   const handleDelete = () => {
     setImages("");
+    setFileImage(undefined);
+  };
+
+  const onClickMint = async () => {
+    await mintNft(fileImage);
+    setRefresh((prev) => !prev);
+    handleDelete();
   };
 
   return (
@@ -54,7 +60,10 @@ function Minting({ refresh }: MintingProps) {
             </div>
 
             <br></br>
-            <button className="px-4 py-2 text-white bg-green-500 rounded hover:opacity-80 w-60">
+            <button
+              onClick={onClickMint}
+              className="px-4 py-2 text-white bg-green-500 rounded hover:opacity-80 w-60"
+            >
               Mint
             </button>
           </div>
@@ -83,6 +92,7 @@ function Minting({ refresh }: MintingProps) {
           </div>
         </div>
       )}
+      {loading && <Loading />}
     </div>
   );
 }

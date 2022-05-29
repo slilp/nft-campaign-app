@@ -8,7 +8,7 @@ interface UseWalletProps {
 
 function useWallet({ refresh, wallet }: UseWalletProps) {
   const [balance, setBalance] = useState<number>(0);
-  const RPC_URL = "https://polygon-rpc.com";
+  const RPC_URL = "https://kovan.infura.io/v3/4740dddff17b42d1908d73c3860b26be";
   const provider = new StaticJsonRpcProvider(RPC_URL);
 
   useEffect(() => {

@@ -10,14 +10,11 @@ function Stat({ refresh }: StatProps) {
   const { stat } = useDashboard({ refresh });
   const { balance } = useWallet({
     refresh,
-    wallet: "0xbf67533f4d1dc11e9b655ae96af81146f2ba0136",
+    wallet: "0xbf67533F4d1DC11E9b655aE96aF81146f2BA0136",
   });
 
   const transformAddress = (adr: string) =>
     adr.substring(0, 12) + "..." + adr.substring(adr.length - 12, adr.length);
-
-  const transformShortAddress = (adr: string) =>
-    adr.substring(0, 6) + "..." + adr.substring(adr.length - 6, adr.length);
 
   return (
     <div className="grid lg:grid-cols-4 grid-cols-1 gap-4">
@@ -30,7 +27,7 @@ function Stat({ refresh }: StatProps) {
         <div className="flex flex-col justify-center flex-wrap">
           <h1 className="text-white text-lg">Root wallet</h1>
           <h1 className="text-white text-md">
-            {transformAddress("0xbf67533f4d1dc11e9b655ae96af81146f2ba0136")}
+            {transformAddress("0xbf67533F4d1DC11E9b655aE96aF81146f2BA0136")}
           </h1>
           <hr className="my-2"></hr>
           <h1 className="text-white text-md">Balance :</h1>
@@ -39,7 +36,7 @@ function Stat({ refresh }: StatProps) {
           <button
             onClick={() =>
               window.open(
-                "https://bscscan.com/address/0xbf67533f4d1dc11e9b655ae96af81146f2ba0136",
+                "https://bscscan.com/address/0xbf67533F4d1DC11E9b655aE96aF81146f2BA0136",
                 "_blank"
               )
             }

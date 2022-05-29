@@ -1,13 +1,22 @@
+import { useState } from "react";
 import { FaTimesCircle } from "react-icons/fa";
 import { IModal } from "./Nft";
 
-interface TransferModal {
+interface TransferModalProps {
   setShowModal: React.Dispatch<React.SetStateAction<IModal>>;
+  transfer: any;
   image: string;
   nftId: number;
 }
 
-function TransferModal({ setShowModal, image, nftId }: TransferModal) {
+function TransferModal({
+  setShowModal,
+  transfer,
+  image,
+  nftId,
+}: TransferModalProps) {
+  const [wallet, setWallet] = useState<string>("");
+
   return (
     <div
       className="h-screen  top-0 bottom-0 right-0 left-0 fixed z-50 "
@@ -45,13 +54,17 @@ function TransferModal({ setShowModal, image, nftId }: TransferModal) {
               type="text"
               className="form-control px-3 py-1.5 w-full text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-gray-600 focus:outline-none"
               placeholder="transfer to address"
+              onChange={(e) => setWallet(e.target.value.trim())}
             />
             <div className="text-center border-t border-slate-200">
               <button
+                disabled={wallet.length < 42}
                 className="px-2 py-1 my-3 border border-green-500 rounded hover:bg-green-500 hover:text-white transition"
-                onClick={() =>
-                  setShowModal((prev) => ({ ...prev, open: false }))
-                }
+                onClick={async () => {
+                  setWallet("");
+                  setShowModal((prev) => ({ ...prev, open: false }));
+                  await transfer(nftId, wallet);
+                }}
               >
                 Confirm Transfer
               </button>

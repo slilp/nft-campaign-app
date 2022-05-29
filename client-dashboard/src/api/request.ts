@@ -44,6 +44,7 @@ const api = {
     data?: TRequest,
     requestOptions?: AxiosRequestConfig
   ): Promise<AxiosResponse<TResponse>> => {
+    console.log(data);
     return request<TRequest, TResponse>("post", url, requestOptions, data);
   },
   put: <TRequest = any, TResponse = any>(

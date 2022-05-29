@@ -4,6 +4,7 @@ import {
   INftListResponse,
   IMintRequest,
   ITransferRequest,
+  INftModel,
 } from "./types/NFTType";
 
 export const getNftByOwner = async ({
@@ -17,18 +18,21 @@ export const getNftByOwner = async ({
   return response.data;
 };
 
-export const mint = async (data: IMintRequest): Promise<INftListResponse> => {
-  const response = await request.post<IMintRequest, INftListResponse>(
+export const mint = async (data: IMintRequest): Promise<INftModel> => {
+  const bodyFormData = new FormData();
+  bodyFormData.append("image", data.image as File);
+  const requestOptions = { headers: { "Content-Type": "multipart/form-data" } };
+  const response = await request.post<any, INftModel>(
     "/nft/mint",
-    data
+    bodyFormData,
+    requestOptions
   );
   return response.data;
 };
 
-export const transfer = async (
-  data: ITransferRequest
-): Promise<INftListResponse> => {
-  const response = await request.post<ITransferRequest, INftListResponse>(
+export const transfer = async (data: ITransferRequest): Promise<INftModel> => {
+  console.log(data);
+  const response = await request.put<ITransferRequest, INftModel>(
     "/nft/send-nft",
     data
   );

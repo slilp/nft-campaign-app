@@ -20,15 +20,9 @@ const nftServices = {
     return await nftModel.count();
   },
   countFindByFilter: async (ownerFilter) => {
-    return await nftModel
-      .find(
-        ownerFilter
-          ? {
-              owner: ownerFilter,
-            }
-          : {}
-      )
-      .count();
+    return await nftModel.count({
+      owner: ownerFilter,
+    });
   },
   findByFilter: async (ownerFilter, { skip, limit }) => {
     return await nftModel

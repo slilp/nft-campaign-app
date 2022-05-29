@@ -4,7 +4,7 @@ export interface ITransferRequest {
 }
 
 export interface IMintRequest {
-  image: File;
+  image?: File;
 }
 
 export interface INftOwnerRequest {

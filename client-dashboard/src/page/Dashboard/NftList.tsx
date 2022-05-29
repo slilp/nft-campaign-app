@@ -16,7 +16,7 @@ function NftList({ refresh, setShowModal, search, setSearch }: NftListProps) {
   const { nftList } = useNft({
     refresh,
     owner: !search.typeWallet
-      ? "0xbf67533f4d1dc11e9b655ae96af81146f2ba0136"
+      ? "0xbf67533F4d1DC11E9b655aE96aF81146f2BA0136"
       : search.selectedWallet || "-",
     skip: search.page,
   });
