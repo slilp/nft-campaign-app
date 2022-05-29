@@ -1,15 +1,23 @@
 import request from "./request";
-import { INftListResponse, ITransferRequest } from "./types/NFTType";
+import {
+  INftListResponse,
+  INftModel,
+  ITransferRequest,
+  INftOwnerRequest,
+} from "./types/NFTType";
 
-export const getNftByOwner = async (): Promise<INftListResponse> => {
-  const response = await request.get<INftListResponse>("/user/nft");
+export const getNftByOwner = async ({
+  skip,
+  limit,
+}: INftOwnerRequest): Promise<INftListResponse> => {
+  const response = await request.get<INftListResponse>(
+    `/user/nft?skip=${skip}&limit=${limit}`
+  );
   return response.data;
 };
 
-export const transfer = async (
-  data: ITransferRequest
-): Promise<INftListResponse> => {
-  const response = await request.post<ITransferRequest, INftListResponse>(
+export const transfer = async (data: ITransferRequest): Promise<INftModel> => {
+  const response = await request.post<ITransferRequest, INftModel>(
     "/user/send-nft",
     data
   );

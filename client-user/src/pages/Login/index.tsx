@@ -1,0 +1,133 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { FaCubes, FaWallet } from "react-icons/fa";
+import { useWeb3React } from "@web3-react/core";
+import useAuth from "../../hooks/useAuth";
+import { injected } from "../../utils/connector";
+import { toast } from "react-toastify";
+import { setAuthWallet } from "../../utils/authHelper";
+
+type InputLogin = {
+  username: string;
+  password: string;
+};
+
+function Login() {
+  const { loginUser } = useAuth();
+  const { activate } = useWeb3React();
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<InputLogin>();
+  const onSubmit: SubmitHandler<InputLogin> = async ({
+    username,
+    password,
+  }) => {
+    await loginUser(username, password);
+  };
+
+  const connect = async () => {
+    try {
+      await activate(injected);
+      setAuthWallet("true");
+    } catch (ex) {
+      toast.error(JSON.stringify(ex), {
+        position: toast.POSITION.BOTTOM_RIGHT,
+      });
+    }
+  };
+
+  return (
+    <div className="container mx-auto flex items-center justify-center h-screen flex-col">
+      <h1 className="text-7xl">
+        <FaCubes></FaCubes>
+      </h1>
+      <h1 className="text-3xl font-bold mt-2">EAT SLEEP and</h1>
+      <h1 className="text-3xl font-bold my-1">
+        <span className="text-pink-500"> COLLECT</span>{" "}
+        <span className="text-red-500">NFTs...</span>
+      </h1>
+
+      <div className="flex items-center justify-center my-4 w-72">
+        <div className="max-w-md w-full">
+          <div>
+            <h2 className="text-2xl text-center">Sign in</h2>
+            <p className="mt-2 text-center text-sm text-gray-600">
+              Or
+              <Link
+                to="/register"
+                className="text-lg ml-3 font-medium text-indigo-600 hover:text-indigo-500"
+              >
+                register
+              </Link>
+            </p>
+          </div>
+          <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
+            <input type="hidden" name="remember" defaultValue="true" />
+            <div className="rounded-md shadow-sm -space-y-px">
+              <div className="my-4">
+                <label htmlFor="email-address" className="sr-only">
+                  Email address
+                </label>
+                <input
+                  type="email"
+                  {...register("username", { required: true })}
+                  className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  placeholder="Email address"
+                />
+                {errors.username && (
+                  <span className="text-red-500 text-sm italic">
+                    Username is required
+                  </span>
+                )}
+              </div>
+              <div>
+                <label htmlFor="password" className="sr-only">
+                  Password
+                </label>
+                <input
+                  {...register("password", { required: true })}
+                  type="password"
+                  className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                  placeholder="Password"
+                />
+                {errors.password && (
+                  <span className="text-red-500 text-sm italic">
+                    Password is required
+                  </span>
+                )}
+              </div>
+            </div>
+            <div>
+              <button
+                type="submit"
+                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                <span className="absolute left-0 inset-y-0 flex items-center pl-3">
+                  <FaCubes className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" />
+                </span>
+                Sign in
+              </button>
+              <button
+                type="button"
+                onClick={connect}
+                className="relative w-full my-3 flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
+              >
+                <span className="absolute left-0 inset-y-0 flex items-center pl-3">
+                  <FaWallet className="h-5 w-5 text-orange-500 group-hover:text-orange-400" />
+                </span>
+                Connect wallet
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default Login;

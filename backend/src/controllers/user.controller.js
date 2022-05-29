@@ -62,6 +62,10 @@ module.exports = {
       },
     });
   },
+  userInfo: async (req, res) => {
+    const result = await userServices.findById(req.user);
+    return res.json(result);
+  },
   userTransactions: async (req, res) => {
     const { skip = 0, limit = 15 } = req.query;
     const result = await Promise.all([

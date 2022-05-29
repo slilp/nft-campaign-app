@@ -11,7 +11,9 @@ const userServices = {
     return await userModel.findOne({ username: _username });
   },
   findById: async (id) => {
-    return await userModel.findById(id);
+    return await userModel
+      .findById(id)
+      .select({ _id: 1, wallet: 1, derivationId: 1 });
   },
   findByAddress: async (address) => {
     return await userModel.findOne({ wallet: address });

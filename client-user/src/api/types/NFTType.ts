@@ -3,6 +3,10 @@ export interface ITransferRequest {
   to: string;
 }
 
+export interface INftOwnerRequest {
+  skip?: number;
+  limit?: number;
+}
 export interface INftListResponse {
   totalCount: number;
   nfts: {

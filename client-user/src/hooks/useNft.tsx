@@ -1,51 +1,34 @@
-import { useState } from "react";
-import { mint, transfer, getNftByOwner } from "../api/nftServices";
+import { useState, useEffect } from "react";
+import { getNftByOwner } from "../api/nftServices";
+import { INftListResponse } from "../api/types/NFTType";
 
-function useNft() {
-  const [loading, setLoading] = useState<boolean>(false);
+interface UseNftProps {
+  refresh: boolean;
+  owner: string;
+  skip: number;
+}
 
-  const transferNft = async (nftId: number, to: string) => {
-    setLoading(true);
-    try {
-      const response = await transfer({
-        nftId,
-        to,
-      });
-      setLoading(false);
-      return response;
-    } catch (error) {
-      setLoading(false);
-    }
-  };
-  const mintNft = async (image: File) => {
-    setLoading(true);
-    try {
-      const response = await mint({
-        image,
-      });
-      setLoading(false);
-      return response;
-    } catch (error) {
-      setLoading(false);
-    }
-  };
+function useNft({ refresh, owner, skip }: UseNftProps) {
+  const [nftList, setNftList] = useState<INftListResponse>({
+    totalCount: 0,
+    nfts: [],
+  });
 
-  const fetchNftData = async (skip: number, limit: number, search: string) => {
-    setLoading(true);
+  useEffect(() => {
+    fetchNftData(skip, owner);
+  }, [refresh, owner, skip]);
+
+  const fetchNftData = async (skip: number, search: string) => {
     try {
       const response = await getNftByOwner({
-        skip,
-        limit,
-        search,
+        skip: skip * 15,
+        limit: 15,
       });
-      setLoading(false);
-      return response;
-    } catch (error) {
-      setLoading(false);
-    }
+      setNftList(response);
+    } catch (error) {}
   };
 
-  return { transferNft, mintNft, fetchNftData, loading };
+  return { nftList };
 }
 
 export default useNft;

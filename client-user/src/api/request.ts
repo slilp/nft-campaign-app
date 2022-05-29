@@ -4,15 +4,19 @@ import axios, {
   Method,
   AxiosResponse,
 } from "axios";
+import { getAuth, removeAuth } from "../utils/authHelper";
 
 const httpClient: AxiosInstance = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: "http://localhost:3001/api",
 });
 
 httpClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token");
-    if (!token) return Promise.reject();
+    const token = getAuth();
+    if (!token) {
+      removeAuth();
+      window.location.reload();
+    }
     config.headers = {
       Authorization: `Bearer ${token}`,
       Accept: "application/json",
@@ -26,9 +30,10 @@ httpClient.interceptors.request.use(
 httpClient.interceptors.response.use(
   (response) => response,
   (error) => {
+    console.log(error);
     if (error.response.status === 403) {
-      localStorage.removeItem("token");
-      return Promise.reject(error);
+      removeAuth();
+      window.location.reload();
     }
 
     return Promise.reject(error);

@@ -42,4 +42,11 @@ router.get(
   asyncHandler(userControllers.userNft)
 );
 
+router.get(
+  "",
+  [jwtAuthentication],
+  validate,
+  asyncHandler(userControllers.userInfo)
+);
+
 module.exports = router;
