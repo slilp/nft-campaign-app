@@ -91,6 +91,17 @@ module.exports = {
       gas: 4000000,
       skipDryRun: true,
     },
+    bsctestnet: {
+      provider: function () {
+        return new HDWalletProvider(
+          process.env.PRIVATE_KEY,
+          `https://data-seed-prebsc-1-s2.binance.org:8545`
+        );
+      },
+      network_id: 97,
+      gas: 4000000,
+      skipDryRun: true,
+    },
     // Useful for private networks
     // private: {
     // provider: () => new HDWalletProvider(mnemonic, `https://network.io`),

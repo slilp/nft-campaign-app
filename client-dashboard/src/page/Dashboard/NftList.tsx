@@ -41,9 +41,15 @@ function NftList({ refresh, setShowModal, search, setSearch }: NftListProps) {
               <span className="font-semibold">ID : {item.nftId} </span>
             </h1>
             <img
+              onClick={() =>
+                window.open(
+                  `https://gateway.pinata.cloud/ipfs/${item.urlImage}`,
+                  "_blank"
+                )
+              }
               alt="new-nft"
               src={`https://gateway.pinata.cloud/ipfs/${item.urlImage}`}
-              className="rounded-lg h-60 w-60"
+              className="rounded-lg h-60 w-60 cursor-pointer"
             ></img>
             <h1 className="my-2">
               <span className="font-semibold">Owner </span> :{" "}

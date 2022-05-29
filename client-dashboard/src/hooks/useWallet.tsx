@@ -8,7 +8,7 @@ interface UseWalletProps {
 
 function useWallet({ refresh, wallet }: UseWalletProps) {
   const [balance, setBalance] = useState<number>(0);
-  const RPC_URL = "https://kovan.infura.io/v3/4740dddff17b42d1908d73c3860b26be";
+  const RPC_URL = "https://data-seed-prebsc-1-s2.binance.org:8545";
   const provider = new StaticJsonRpcProvider(RPC_URL);
 
   useEffect(() => {
