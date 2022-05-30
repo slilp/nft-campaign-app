@@ -64,7 +64,7 @@ const useNftSendContract = () => {
       const nftInfo = await sendTransaction(
         nftContract,
         "tokenURI",
-        ["4"],
+        [id.toNumber()],
         null,
         false
       );

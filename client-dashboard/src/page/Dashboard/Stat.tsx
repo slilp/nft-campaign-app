@@ -1,4 +1,4 @@
-import { FaWallet, FaUserAlt, FaCubes } from "react-icons/fa";
+import { FaWallet, FaUserAlt, FaCubes, FaCodepen } from "react-icons/fa";
 import useDashboard from "../../hooks/useDashboard";
 import useWallet from "../../hooks/useWallet";
 
@@ -31,7 +31,7 @@ function Stat({ refresh }: StatProps) {
           </h1>
           <hr className="my-2"></hr>
           <h1 className="text-white text-md">Balance :</h1>
-          <h1 className="text-white text-3xl ">{balance.toFixed(4)} BNB</h1>
+          <h1 className="text-white text-3xl ">{balance.toFixed(4)} MATIC</h1>
           <br></br>
           <button
             onClick={() =>
@@ -70,15 +70,15 @@ function Stat({ refresh }: StatProps) {
           <h1 className="text-3xl font-semibold">{stat?.totalNft}</h1>
         </div>
         <div className="flex-1 text-center my-5">
-          <div className="text-white h-10 w-10 rounded-full bg-yellow-500 flex items-center justify-center mx-auto">
+          <div className="text-white h-10 w-10 rounded-full bg-purple-500 flex items-center justify-center mx-auto">
             <h1>
-              <FaUserAlt></FaUserAlt>
+              <FaCodepen></FaCodepen>
             </h1>
           </div>
           <br></br>
-          <h1 className="text-lg">Total user</h1>
+          <h1 className="text-lg">Network </h1>
           <br></br>
-          <h1 className="text-3xl font-semibold">30</h1>
+          <h1 className="text-2xl font-semibold">Polygon (Matic)</h1>
         </div>
       </div>
     </div>

@@ -6,7 +6,7 @@ import Home from "./pages/Home";
 import useAuth from "../src/hooks/useAuth";
 
 function App() {
-  const { wallet, loading } = useAuth();
+  const { wallet } = useAuth();
 
   return (
     <div>

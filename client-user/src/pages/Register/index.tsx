@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { FaCubes } from "react-icons/fa";
@@ -15,7 +14,6 @@ function Register() {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<InputRegister>();
   const onSubmit: SubmitHandler<InputRegister> = async (data) => {

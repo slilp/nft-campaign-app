@@ -5,7 +5,7 @@ import useNft from "../../hooks/useNft";
 import TransferModal from "./TransferModal";
 import Loading from "../../components/Loading";
 import useNftSendContract from "../../hooks/useNftSendContract";
-
+import { FaCubes } from "react-icons/fa";
 export interface IModal {
   open: boolean;
   nftId?: number;
@@ -45,7 +45,10 @@ function Home() {
         <hr className="my-5"></hr>
         <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1  gap-5 mt-5">
           {data.map((item) => (
-            <div className="p-3 bg-gray-100 rounded-lg mx-auto">
+            <div
+              key={`nft-id-${item.nftId}`}
+              className="p-3 bg-gray-100 rounded-lg mx-auto"
+            >
               <h1 className="my-2 text-center">
                 <span className="font-semibold">ID : {item.nftId} </span>
               </h1>
@@ -77,6 +80,14 @@ function Home() {
             </div>
           ))}
         </div>
+        {data.length === 0 && (
+          <div className="text-3xl h-72 justify-center flex flex-col items-center gap-5 text-gray-400 font-semibold">
+            <h1 className="text-7xl">
+              <FaCubes></FaCubes>
+            </h1>
+            <h1>NO NFTs</h1>
+          </div>
+        )}
         {data.length < nftList.totalCount && (
           <div className="text-center">
             <button

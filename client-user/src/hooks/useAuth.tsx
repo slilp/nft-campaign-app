@@ -81,7 +81,7 @@ export function AuthProvider({
 
   const signUp = async (username: string, password: string) => {
     try {
-      const response = await register({ username, password });
+      await register({ username, password });
       navigate("/login", { replace: true });
       toast.success("Success creating new user", {
         position: toast.POSITION.BOTTOM_RIGHT,

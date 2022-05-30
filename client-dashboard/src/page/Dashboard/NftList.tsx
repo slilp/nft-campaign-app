@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { IModal } from "./Nft";
 import { INftModelResponse } from "../../api/types/NFTType";
 import { IQuerySelection } from "./Nft";
@@ -36,7 +36,10 @@ function NftList({ refresh, setShowModal, search, setSearch }: NftListProps) {
     <>
       <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1  gap-5 mt-5">
         {data.map((item) => (
-          <div className="p-3 bg-gray-100 rounded-lg mx-auto">
+          <div
+            key={`nft-id-${item.nftId}`}
+            className="p-3 bg-gray-100 rounded-lg mx-auto"
+          >
             <h1 className="my-2 text-center">
               <span className="font-semibold">ID : {item.nftId} </span>
             </h1>

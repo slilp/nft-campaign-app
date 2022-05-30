@@ -28,10 +28,12 @@ module.exports = {
   },
   sendNft: async (req, res) => {
     const userInfo = await userServices.findById(req.user);
+
     const nftInfo = await nftServices.findByOwnerAndId(
       userInfo.wallet,
       req.body.nftId
     );
+
     if (!nftInfo)
       return res.status(400).json({
         message: "invalid nft id",

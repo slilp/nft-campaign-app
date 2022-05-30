@@ -33,6 +33,7 @@ const nftServices = {
             }
           : {}
       )
+      .sort({ nftId: -1 })
       .skip(skip)
       .limit(limit);
   },

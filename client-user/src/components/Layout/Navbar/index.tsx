@@ -21,12 +21,9 @@ function Navbar() {
           {wallet !== "" && (
             <button
               style={{ minWidth: "175px" }}
-              onClick={() =>
-                window.open(
-                  `https://polygonscan.com/address/${wallet}`,
-                  "_blank"
-                )
-              }
+              onClick={() => {
+                navigator.clipboard.writeText(wallet);
+              }}
               className="bg-red-400 hover:bg-red-500 transition text-white rounded-lg flex items-center justify-center gap-5 p-3"
             >
               <span>
