@@ -8,8 +8,7 @@ interface UseWalletProps {
 
 function useWallet({ refresh, wallet }: UseWalletProps) {
   const [balance, setBalance] = useState<number>(0);
-  const RPC_URL = "https://polygon-rpc.com";
-  const provider = new StaticJsonRpcProvider(RPC_URL);
+  const provider = new StaticJsonRpcProvider(process.env.REACT_APP_RPC);
 
   useEffect(() => {
     getBalance(wallet);

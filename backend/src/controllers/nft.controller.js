@@ -36,7 +36,6 @@ module.exports = {
       return res.status(400).json({
         message: "invalid nft id",
       });
-
     const sendResult = await blockchainServices.transfer(
       userInfo.derivationId,
       userInfo.wallet,

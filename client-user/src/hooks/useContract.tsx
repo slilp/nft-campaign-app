@@ -3,7 +3,7 @@ import { useWeb3React } from "@web3-react/core";
 import { getNftContract } from "../utils/contractHelper";
 
 export const useNftContract = () => {
-  const address = "0xf3dE277dCd18c53e721054275FC3F3E36E75f026";
+  const address = process.env.REACT_APP_TOKEN_ADDRESS + "";
   const { library, account } = useWeb3React();
   return useMemo(
     () =>

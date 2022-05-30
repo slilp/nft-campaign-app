@@ -10,6 +10,7 @@ import { useWeb3React } from "@web3-react/core";
 import { useNavigate } from "react-router-dom";
 import { login, register, info } from "../api/userServices";
 import { toast } from "react-toastify";
+import { injected } from "../utils/connector";
 import {
   setAuth,
   removeAuth,
@@ -37,7 +38,7 @@ export function AuthProvider({
   const [loading, setLoading] = useState<boolean>(false);
 
   const navigate = useNavigate();
-  const { account, deactivate } = useWeb3React();
+  const { account, deactivate, activate } = useWeb3React();
 
   const initialSession = async () => {
     try {
@@ -49,14 +50,19 @@ export function AuthProvider({
     }
   };
 
-  useEffect(() => {
+  const connection = async () => {
     setLoading(true);
     if (getAuthWallet() === "false" && getAuth()) {
       initialSession();
     } else if (getAuthWallet() === "true") {
+      await activate(injected);
       setWallet(account + "");
       setLoading(false);
     }
+  };
+
+  useEffect(() => {
+    connection();
   }, [account]);
 
   const loginUser = async (username: string, password: string) => {
@@ -64,6 +70,7 @@ export function AuthProvider({
       const response = await login({ username, password });
       setWallet(response.account.wallet);
       setAuth(response.token.accessToken);
+      navigate("/", { replace: true });
       setAuthWallet("false");
     } catch (error) {
       toast.error("Invalid username or password", {

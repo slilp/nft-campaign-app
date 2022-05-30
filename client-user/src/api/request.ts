@@ -7,7 +7,7 @@ import axios, {
 import { getAuth, removeAuth } from "../utils/authHelper";
 
 const httpClient: AxiosInstance = axios.create({
-  baseURL: "http://localhost:3001/api",
+  baseURL: process.env.REACT_APP_SERVICE_URL,
 });
 
 httpClient.interceptors.request.use(
@@ -19,8 +19,6 @@ httpClient.interceptors.request.use(
     }
     config.headers = {
       Authorization: `Bearer ${token}`,
-      Accept: "application/json",
-      "Content-Type": "application/x-www-form-urlencoded",
     };
     return config;
   },

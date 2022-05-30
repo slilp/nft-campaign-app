@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { FaCubes, FaWallet } from "react-icons/fa";
 import { useWeb3React } from "@web3-react/core";
@@ -16,11 +15,11 @@ type InputLogin = {
 function Login() {
   const { loginUser } = useAuth();
   const { activate } = useWeb3React();
+  const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<InputLogin>();
   const onSubmit: SubmitHandler<InputLogin> = async ({
@@ -34,6 +33,7 @@ function Login() {
     try {
       await activate(injected);
       setAuthWallet("true");
+      navigate("/", { replace: true });
     } catch (ex) {
       toast.error(JSON.stringify(ex), {
         position: toast.POSITION.BOTTOM_RIGHT,

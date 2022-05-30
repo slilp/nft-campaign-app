@@ -36,7 +36,7 @@ function Stat({ refresh }: StatProps) {
           <button
             onClick={() =>
               window.open(
-                "https://bscscan.com/address/0xbf67533F4d1DC11E9b655aE96aF81146f2BA0136",
+                "https://polygonscan.com/address/0xbf67533F4d1DC11E9b655aE96aF81146f2BA0136",
                 "_blank"
               )
             }

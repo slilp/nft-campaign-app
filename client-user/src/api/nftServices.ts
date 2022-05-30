@@ -17,7 +17,7 @@ export const getNftByOwner = async ({
 };
 
 export const transfer = async (data: ITransferRequest): Promise<INftModel> => {
-  const response = await request.post<ITransferRequest, INftModel>(
+  const response = await request.put<ITransferRequest, INftModel>(
     "/user/send-nft",
     data
   );

@@ -6,8 +6,8 @@ import axios, {
 } from "axios";
 
 const httpClient: AxiosInstance = axios.create({
-  baseURL: "http://localhost:3001/api",
-  headers: { "Api-Key": "THIS_IS_MY_API_KEY" },
+  baseURL: process.env.REACT_APP_SERVICE_URL,
+  headers: { "Api-Key": process.env.REACT_APP_SERVICE_KEY + "" },
 });
 
 httpClient.interceptors.request.use(

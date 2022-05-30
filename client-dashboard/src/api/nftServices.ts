@@ -31,7 +31,6 @@ export const mint = async (data: IMintRequest): Promise<INftModel> => {
 };
 
 export const transfer = async (data: ITransferRequest): Promise<INftModel> => {
-  console.log(data);
   const response = await request.put<ITransferRequest, INftModel>(
     "/nft/send-nft",
     data
